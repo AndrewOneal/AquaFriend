@@ -1,10 +1,12 @@
+import time
+
 class Pet:
-    state = "happy"
+    state = "sad"
 
     def set_state(self, state):
         self.state = state
 
-    def display_dog(self, state):
+    def display_dog(self):
         if self.state == "happy":
             print(r"""       
                /^-^\
@@ -54,14 +56,15 @@ class UserProfile:
     _weight = ""
     lifestyle = ""
     _lifestyleFactor = ""
-    _daily_intake = ""
+    _goal_intake = ""
+    _total_intake = 0
 
     def __init__(self, name, lifestyle):
         self.name = name
         self.lifestyle = lifestyle
         self.set_weight_from_input()
         self.set_lifestyle_factor(lifestyle)
-        self.calc_daily_intake()
+        self.set_goal_intake()
 
     def set_weight_from_input(self):
         try:
@@ -80,8 +83,8 @@ class UserProfile:
             factor = 0.5
         self._lifestyleFactor = factor
 
-    def calc_daily_intake(self):
-        return self._weight * self._lifestyleFactor
+    def set_goal_intake(self):
+        self._goal_intake = self._weight * self._lifestyleFactor
 
     def print_user_profile(self):
         print("____User Profile____")
@@ -93,9 +96,14 @@ class UserProfile:
             print("Lifestyle: moderately active")
         else:
             print("Lifestyle: sedentary")
-        print(f"Recommended Daily Water Intake: {self._daily_intake}")
+        print(f"Recommended Daily Water Intake: {self._goal_intake}")
+
+    def add_intake(self, intake):
+        print("Intake Recorded!")
+        self._total_intake += intake
 
 if __name__ == '__main__':
+    dog = Pet()
 
     print("Welcome to AquaFriend!")
     print("Please set up your user profile below")
@@ -104,5 +112,25 @@ if __name__ == '__main__':
     while lifestyle not in ['a', 'm', 's']:
         lifestyle = input("Please select your lifestyle: (a)ctive, (m)oderately active, or (s)edentary:\n")
     userProf = UserProfile(name, lifestyle)
-    print(userProf.calc_daily_intake())
+    userProf.set_goal_intake()
     userProf.print_user_profile()
+
+    while True:
+        intake = int(input("Please input your water intake for the hour in fluid ounces: "))
+        userProf.add_intake(intake)
+        if userProf._total_intake < (0.25 * userProf._goal_intake):
+            dog.set_state("dead")
+            print("Keep drinking! Your pet is sick :-(")
+        elif userProf._total_intake < (0.5 * userProf._goal_intake):
+            dog.set_state("sad")
+            print("Good progress! Your pet is still sad however")
+        elif userProf._total_intake < (0.99 * userProf._goal_intake):
+            dog.set_state("mid")
+            print("Almost there, your pet is content")
+        elif userProf._total_intake >= userProf._goal_intake:
+            dog.set_state("happy")
+            print("Your reached your goal! Your pet is happy! :-)")
+
+        dog.display_dog()
+        
+        time.sleep(10)
