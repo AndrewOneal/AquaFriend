@@ -76,11 +76,11 @@ class UserProfile:
 
     def set_lifestyle_factor(self, lifestyle):
         if lifestyle == "a":
-            factor = 1
+            factor = 0.9
         elif lifestyle == "s":
-            factor = 0.75
+            factor = 0.65
         else:
-            factor = 0.5
+            factor = 0.4
         self._lifestyleFactor = factor
 
     def set_goal_intake(self):
